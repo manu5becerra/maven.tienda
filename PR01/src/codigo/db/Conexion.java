@@ -4,7 +4,7 @@ package codigo.db;
 
 public class Conexion {
 	
-	 private static Conexion instance;
+	 private static Conexion instance; 
 
 	private Conexion() {
 	}
