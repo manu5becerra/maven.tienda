@@ -28,6 +28,6 @@ public class Persona {
 		 
 		int  iva = Config.IVA;
 		return this.sueldo + ( (this.sueldo * iva) / 100 );
-	}
+	} 
 
 }
