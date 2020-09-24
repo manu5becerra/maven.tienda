@@ -44,11 +44,26 @@ public class Conexion {
          }
 	}
 	
-	
-	public void insertar(String TABLA, String[] values) {
-		
+
+	private String getStringArray(String[] values) {
+		String res = "";
+		for (String value : values) {
+			res = res + ",'" +value+"'";
+		}
+		res = res.substring(1);
+		return res;
 	}
 	
+	
+	public void insertar(String TABLA, String[] values) throws SQLException{
+		String tail = this.getStringArray(values);
+		String query = "insert into "+TABLA+" values("+tail+")";
+		
+		Statement state = this.getState();
+		state.executeUpdate(query);
+	}
+	
+
 	public void select(String TABLA) {
 		
 	}
@@ -59,6 +74,13 @@ public class Conexion {
 	
 	public void delete(String TABLA, Integer ID) {
 	
+	}
+
+	public boolean isConnected() throws SQLException {
+		if (connection == null) {
+			return false;
+		} 
+		return !connection.isClosed();
 	}
 	
 	

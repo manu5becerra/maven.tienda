@@ -14,7 +14,14 @@ public class Principal {
 	public static void main(String[] args) { 
 	 
 		Conexion ctx = Conexion.getInstance();
+		
+		String[] lista = ["hola", "don", "pepito"];
+		ctx.insertar("person", lista);
+		
+		
 		ctx.close();
+		
+		boolean isConnected = ctx.isConnected();
 		
         try
         {
