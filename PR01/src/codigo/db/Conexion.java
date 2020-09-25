@@ -46,6 +46,7 @@ public class Conexion {
 	
 
 	private String getStringArray(String[] values) {
+		// "XXX", "YYY"
 		String res = "";
 		for (String value : values) {
 			res = res + ",'" +value+"'";
@@ -54,13 +55,39 @@ public class Conexion {
 		return res;
 	}
 	
+	private String getStringArray(String[] cols, String[] values) {
+		// `name`='Buri'
+		String res = "";
+		for (int i = 0; i < values.length; i++) {
+			String value = values[i];
+			String col = cols[i];
+			
+			res = res + ",'" +col+"'='"+value+"'";
+			
+		} 
+		res = res.substring(1);
+		return res;
+	}
+
 	
-	public void insertar(String TABLA, String[] values) throws SQLException{
+	 
+	 
+	/**
+	 * 
+	 * Esta función sirve para insertar datos en una tabla.
+	 * 
+	 * @param TABLA Nombre de la tabla que quiero usar para insertar
+	 * @param values Array de valores a insertar en la tabla
+	 * @return Devolverá <strong>True</strong>/<strong>False</strong> según insertara bien o no
+	 * @throws SQLException Error de SQL, ¿Quizá la tabla no existe?
+	 */
+	public boolean insertar(String TABLA, String[] values) throws SQLException{
 		String tail = this.getStringArray(values);
 		String query = "insert into "+TABLA+" values("+tail+")";
 		
 		Statement state = this.getState();
 		state.executeUpdate(query);
+		return false;
 	}
 	
 
@@ -68,12 +95,23 @@ public class Conexion {
 		
 	}
 	
-	public void update(String TABLA, String[] cols, String[] values) {
+	public void update(String TABLA, Integer ID, String[] cols, String[] values) throws SQLException {
+		// UPDATE "+TABLA+" SET `name`='Buri' WHERE  `id`="+ID;
+		String tail = this.getStringArray(cols, values);
+		String query = "UPDATE 	 "+TABLA+" SET "+tail+"  WHERE  `id`="+ID;
 		
+		Statement state = this.getState();
+		state.executeUpdate(query); 
 	}
 	
-	public void delete(String TABLA, Integer ID) {
 	
+	public void delete(String TABLA, Integer ID) throws SQLException{
+		
+		// DELETE FROM XXXXX WHERE ID = YYYY
+		String query = "DELETE FROM "+TABLA+" WHERE id="+ID;
+		
+		Statement state = this.getState();
+		state.executeUpdate(query);
 	}
 
 	public boolean isConnected() throws SQLException {
