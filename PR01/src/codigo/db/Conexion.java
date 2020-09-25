@@ -2,6 +2,7 @@ package codigo.db;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -55,17 +56,20 @@ public class Conexion {
 		return res;
 	}
 	
-	private String getStringArray(String[] cols, String[] values) {
+	private String getStringArray(String[] cols, String[] values, String separador) {
 		// `name`='Buri'
 		String res = "";
 		for (int i = 0; i < values.length; i++) {
 			String value = values[i];
 			String col = cols[i];
 			
-			res = res + ",'" +col+"'='"+value+"'";
+			res = res + separador+"'" +col+"'='"+value+"'";
 			
 		} 
-		res = res.substring(1);
+		
+		res = res.substring( separador.length() );
+		//res = res.replace( separador, "" );
+		
 		return res;
 	}
 
@@ -91,13 +95,20 @@ public class Conexion {
 	}
 	
 
-	public void select(String TABLA) {
-		
+	public ResultSet select(String TABLA) throws SQLException{
+		Statement state = this.getState();
+		return state.executeQuery("select * from "+TABLA);
+	}
+	
+	public ResultSet select(String TABLA, String[] cols, String[] values) throws SQLException{
+		String tail = this.getStringArray(cols, values, " AND ");
+		Statement state = this.getState();
+		return state.executeQuery("select * from "+TABLA+" WHERE "+tail);
 	}
 	
 	public void update(String TABLA, Integer ID, String[] cols, String[] values) throws SQLException {
 		// UPDATE "+TABLA+" SET `name`='Buri' WHERE  `id`="+ID;
-		String tail = this.getStringArray(cols, values);
+		String tail = this.getStringArray(cols, values, ", ");
 		String query = "UPDATE 	 "+TABLA+" SET "+tail+"  WHERE  `id`="+ID;
 		
 		Statement state = this.getState();
