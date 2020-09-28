@@ -7,14 +7,14 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class Conexion {
-	
-	private static Conexion instance; 
+
+	private static Conexion instance;
 
 	private Conexion() {
 		try {
 			connection = DriverManager.getConnection("jdbc:sqlite:sample.db");
 		} catch (SQLException e) {
-			e.printStackTrace(); 
+			e.printStackTrace();
 		}
 	}
 
@@ -24,103 +24,108 @@ public class Conexion {
 		}
 		return instance;
 	}
-	
+
 	private Connection connection = null;
-	
+
 	private Statement getState() throws SQLException {
 		Statement statement = connection.createStatement();
-        statement.setQueryTimeout(30);  // set timeout to 30 sec.
-        
-        return statement;
+		statement.setQueryTimeout(30); // set timeout to 30 sec.
+
+		return statement;
 	}
-	
-	
+
 	public void close() {
-		 try {
-           if(connection != null)
-             connection.close();
-         } catch(SQLException e)  {
-           // connection close failed.
-           System.err.println(e.getMessage());
-         }
+		try {
+			if (connection != null)
+				connection.close();
+		} catch (SQLException e) {
+			// connection close failed.
+			System.err.println(e.getMessage());
+		}
 	}
-	
+
+	private String getTailValues(String[] values) {
+		// "XXX", "YYY"
+		String res = "";
+		for (String value : values) {
+			res = res + ",('" + value + "')";
+		}
+		res = res.substring(1);
+		return res;
+	}
 
 	private String getStringArray(String[] values) {
 		// "XXX", "YYY"
 		String res = "";
 		for (String value : values) {
-			res = res + ",'" +value+"'";
+			res = res + ",'" + value + "'";
 		}
 		res = res.substring(1);
 		return res;
 	}
-	
+
 	private String getStringArray(String[] cols, String[] values, String separador) {
 		// `name`='Buri'
 		String res = "";
-		for (int i = 0; i < values.length; i++) {
+		for (int i = 0; i < cols.length; i++) {
 			String value = values[i];
 			String col = cols[i];
-			
-			res = res + separador+"'" +col+"'='"+value+"'";
-			
-		} 
-		
-		res = res.substring( separador.length() );
-		//res = res.replace( separador, "" );
-		
+
+			res = res + separador + "'" + col + "'='" + value + "'";
+
+		}
+
+		res = res.substring(separador.length());
+		// res = res.replace( separador, "" );
+
 		return res;
 	}
 
-	
-	 
-	 
 	/**
 	 * 
 	 * Esta función sirve para insertar datos en una tabla.
 	 * 
-	 * @param TABLA Nombre de la tabla que quiero usar para insertar
+	 * @param TABLA  Nombre de la tabla que quiero usar para insertar
 	 * @param values Array de valores a insertar en la tabla
-	 * @return Devolverá <strong>True</strong>/<strong>False</strong> según insertara bien o no
+	 * @return Devolverá <strong>True</strong>/<strong>False</strong> según
+	 *         insertara bien o no
 	 * @throws SQLException Error de SQL, ¿Quizá la tabla no existe?
 	 */
-	public boolean insertar(String TABLA, String[] values) throws SQLException{
-		String tail = this.getStringArray(values);
-		String query = "insert into "+TABLA+" values("+tail+")";
-		
+	public boolean insertar(String TABLA, String[] cols, String[] values) throws SQLException {
+		String tail = this.getTailValues(values);
+		String head = this.getStringArray(cols);
+		String query = "insert into " + TABLA + " (" + head + ") values " + tail + "";
+
 		Statement state = this.getState();
 		state.executeUpdate(query);
 		return false;
 	}
-	
 
-	public ResultSet select(String TABLA) throws SQLException{
+	public ResultSet select(String TABLA) throws SQLException {
 		Statement state = this.getState();
-		return state.executeQuery("select * from "+TABLA);
+		return state.executeQuery("select * from " + TABLA);
 	}
-	
-	public ResultSet select(String TABLA, String[] cols, String[] values) throws SQLException{
+
+	public ResultSet select(String TABLA, String[] cols, String[] values) throws SQLException {
 		String tail = this.getStringArray(cols, values, " AND ");
 		Statement state = this.getState();
-		return state.executeQuery("select * from "+TABLA+" WHERE "+tail);
+		return state.executeQuery("select * from " + TABLA + " WHERE " + tail);
 	}
-	
+
 	public void update(String TABLA, Integer ID, String[] cols, String[] values) throws SQLException {
-		// UPDATE "+TABLA+" SET `name`='Buri' WHERE  `id`="+ID;
+		// UPDATE "+TABLA+" SET `name`='Buri' WHERE `id`="+ID;
 		String tail = this.getStringArray(cols, values, ", ");
-		String query = "UPDATE 	 "+TABLA+" SET "+tail+"  WHERE  `id`="+ID;
-		
+		String query = "UPDATE 	 " + TABLA + " SET " + tail + "  WHERE  `id`=" + ID;
+
 		Statement state = this.getState();
-		state.executeUpdate(query); 
+		state.executeUpdate(query);
 	}
-	
-	
-	public void delete(String TABLA, Integer ID) throws SQLException{
-		
+
+	public void delete(String TABLA, Integer ID) throws SQLException {
+
 		// DELETE FROM XXXXX WHERE ID = YYYY
-		String query = "DELETE FROM "+TABLA+" WHERE id="+ID;
-		
+		String query = "DELETE FROM " + TABLA + " WHERE id=" + ID;
+
 		Statement state = this.getState();
 		state.executeUpdate(query);
 	}
@@ -128,10 +133,8 @@ public class Conexion {
 	public boolean isConnected() throws SQLException {
 		if (connection == null) {
 			return false;
-		} 
+		}
 		return !connection.isClosed();
 	}
-	
-	
-	
+
 }
