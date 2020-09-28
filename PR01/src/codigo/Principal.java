@@ -1,46 +1,33 @@
 package codigo;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-
-import codigo.db.Conexion;
+ 
+import java.sql.SQLException; 
+ 
 import codigo.models.Persona;
 
 public class Principal {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) { 
 		
-		String[] cols = {"name"}; 
-
-		Conexion ctx = Conexion.getInstance();
+		
 		try {
-
-			String[] lista = { "hola", "don", "pepito" };
-			String[] col = {"name"};
-			ctx.insertar("person", col, lista);
 			
-			ctx.update("person", 1, cols, lista);
-
-			ResultSet rs = ctx.select("person");
-			while (rs.next()) {
-				// read the result set
-				System.out.println("name = " + rs.getString("name"));
-			}
+			Persona per = new Persona();
+			per.name     = "Don Jose";
+			per.lastname = "Pepito";
+			per.setId(1);
 			
-			ctx.delete("person", 1);
-
-		} catch (SQLException e) {
-			// if the error message is "out of memory",
-			// it probably means no database file is found
-			System.err.println(e.getMessage());
-		} finally {
-
-		}
-
-		ctx.close();
+			per.insertar();
+			per.list();
+			
+			per.name     = "Don";
+			per.lastname = "Jose";
+			
+			per.update();
+			per.delete();
+			
+		}catch(SQLException e) {
+			System.out.println( e.getMessage() );
+		}  
 
 		// create a database connection
 

@@ -1,33 +1,42 @@
-package codigo.models;
+package codigo.models; 
 
-import codigo.cfg.Config;
+import codigo.db.DbObject;  
+import java.util.ArrayList;
 
-public class Persona {
-	
-	private int id = 0;
-	private String name = "";
-	private int edad = 18;
-	private int sueldo = 100;
-	
-	public boolean esMayor() {
-		return (this.edad >= 18);
-	}
-	
-	public void setEdad(int nuevaEdad) {
-		if (nuevaEdad <= 0) {
-			return;
-		}
-		this.edad = nuevaEdad;
-	}
+public class Persona extends DbObject {	 
 	 
-	public int getId() {
-		return this.id;
-	}
-	
-	public int sueldoBruto() {
-		 
-		int  iva = Config.IVA;
-		return this.sueldo + ( (this.sueldo * iva) / 100 );
-	} 
+	private static final String TABLE = "person";
+	private static final String[] COLS = {"name", "lastname"};
+		
+	private int id = 0;
+	public String name = "";  
+	public String lastname = "";  
 
+	@Override
+	public String getTable() { 
+		return TABLE;
+	} 
+	
+	@Override
+	public String[] getCols() { 
+		return COLS;
+	}
+
+	@Override
+	public String[] getValues() {
+		ArrayList<String> list = new ArrayList<String>();
+		list.add(this.name);
+		list.add(this.lastname);
+		return (String[]) list.toArray();
+	}
+
+	@Override
+	public int getId() { 
+		return this.id;
+	} 
+	
+	public void setId(int id) {
+		this.id = id;
+	}
+ 
 }
