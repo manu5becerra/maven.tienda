@@ -1,6 +1,9 @@
 package codigo.models; 
 
-import codigo.db.DbObject;  
+import codigo.db.DbObject;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class Persona extends DbObject {	 
@@ -11,6 +14,16 @@ public class Persona extends DbObject {
 	private int id = 0;
 	public String name = "";  
 	public String lastname = "";  
+	
+	@Override
+	public DbObject parse(ResultSet rs) throws SQLException {
+		Persona per = new Persona();
+		per.id = rs.getInt("id");
+		per.name = rs.getString("name");
+		per.lastname = rs.getString("lastname");
+		
+		return per;		
+	}
 
 	@Override
 	public String getTable() { 
@@ -23,11 +36,11 @@ public class Persona extends DbObject {
 	}
 
 	@Override
-	public String[] getValues() {
+	public ArrayList<String> getValues() {
 		ArrayList<String> list = new ArrayList<String>();
 		list.add(this.name);
 		list.add(this.lastname);
-		return (String[]) list.toArray();
+		return list;
 	}
 
 	@Override
@@ -38,5 +51,7 @@ public class Persona extends DbObject {
 	public void setId(int id) {
 		this.id = id;
 	}
+
+	
  
 }

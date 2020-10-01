@@ -1,7 +1,9 @@
 package codigo;
  
-import java.sql.SQLException; 
- 
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import codigo.db.DbObject;
 import codigo.models.Persona;
 
 public class Principal {
@@ -17,12 +19,23 @@ public class Principal {
 			per.setId(1);
 			
 			per.insertar();
-			per.list();
+			ArrayList lista = per.list();
+			ArrayList<Persona> lista2 = lista;
+			for (Persona persona : lista2) {
+				System.out.println("1-Persona:"+persona.name);
+			}
 			
 			per.name     = "Don";
 			per.lastname = "Jose";
 			
 			per.update();
+			
+			lista = per.list();
+			lista2 = lista;
+			for (Persona persona : lista2) {
+				System.out.println("Persona:"+persona.name);
+			}
+			
 			per.delete();
 			
 		}catch(SQLException e) {

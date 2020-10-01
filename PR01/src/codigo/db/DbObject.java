@@ -2,6 +2,7 @@ package codigo.db;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public abstract class DbObject {
 	
@@ -10,19 +11,24 @@ public abstract class DbObject {
 	public abstract int   getId();
 	public abstract String   getTable();
 	public abstract String[] getCols();
-	public abstract String[] getValues();
+	public abstract ArrayList<String> getValues();
+	public abstract DbObject parse(ResultSet rs) throws SQLException;
 	
 	public void insertar() throws SQLException { 
 		ctx.insertar(getTable(), getCols(), getValues());
 		
 	}
 	
-	public void list() throws SQLException {
+	public ArrayList<DbObject> list() throws SQLException {
+		ArrayList<DbObject> lista = new ArrayList<DbObject>();
 		ResultSet rs = ctx.select(getTable());
 		while (rs.next()) {
 			// read the result set
-			System.out.println("name = " + rs.getString("name"));
+			DbObject obj = this.parse(rs);
+			lista.add(obj);
 		}
+		
+		return lista;
 	}
 	
 	public void update() throws SQLException { 
