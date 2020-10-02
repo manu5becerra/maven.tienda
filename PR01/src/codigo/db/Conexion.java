@@ -14,9 +14,22 @@ public class Conexion {
 	private Conexion() {
 		try {
 			connection = DriverManager.getConnection("jdbc:sqlite:sample.db");
+			initiateDatabase();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
+		
+	}
+
+	private void initiateDatabase() throws SQLException {
+
+		ArrayList<String> queries = ConfigDB.queries;
+		
+		for (String query : queries) {
+			this.executeQuery(query);	
+		}  
+		
 	}
 
 	public static Conexion getInstance() {
@@ -115,8 +128,7 @@ public class Conexion {
 		String head = this.getStringArray(cols);
 		String query = "insert into " + TABLA + " (" + head + ") values " + tail + "";
 
-		Statement state = this.getState();
-		state.executeUpdate(query);
+		this.executeQuery(query);	
 		return false;
 	}
 
@@ -135,16 +147,17 @@ public class Conexion {
 		// UPDATE "+TABLA+" SET `name`='Buri' WHERE `id`="+ID;
 		String tail = this.getStringArray(cols, values, ", ");
 		String query = "UPDATE 	 " + TABLA + " SET " + tail + "  WHERE  `id`=" + ID;
-
-		Statement state = this.getState();
-		state.executeUpdate(query);
+		this.executeQuery(query);	
 	}
 
 	public void delete(String TABLA, Integer ID) throws SQLException {
 
 		// DELETE FROM XXXXX WHERE ID = YYYY
 		String query = "DELETE FROM " + TABLA + " WHERE id=" + ID;
-
+		this.executeQuery(query);		
+	}
+	
+	private void executeQuery(String query) throws SQLException {
 		Statement state = this.getState();
 		state.executeUpdate(query);
 	}

@@ -17,7 +17,7 @@ public abstract class DbObject {
 	public void insertar() throws SQLException { 
 		ctx.insertar(getTable(), getCols(), getValues());
 		
-	}
+	} 
 	
 	public ArrayList<DbObject> list() throws SQLException {
 		ArrayList<DbObject> lista = new ArrayList<DbObject>();
