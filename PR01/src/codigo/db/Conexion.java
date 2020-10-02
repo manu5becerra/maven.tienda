@@ -45,37 +45,52 @@ public class Conexion {
 		}
 	}
 
-	private String getTailValues(ArrayList<String> values) {
+	private String getTailValues(ArrayList values) {
 		// "XXX", "YYY"
 		String res = "";
 		// ('Don Jose'),('Pepito')
 		// ('Don Jose', 'Pepito')
-		for (String value : values) {
-			res = res + ",'" + value + "'";
+		for (Object value : values) {
+			
+			String resValue = ""+value;
+			if (value instanceof String) {
+				resValue = "'" + value + "'";
+			} 			
+			res = res + ","+resValue;
 		}
 		res = res.substring(1);
 		res = "("+res+")";
 		return res;
 	}
 
-	private String getStringArray(String[] values) {
+	private String getStringArray(ArrayList values) {
 		// "XXX", "YYY"
 		String res = "";
-		for (String value : values) {
-			res = res + ",'" + value + "'";
+		for (Object value : values) {
+			
+			String resValue = ""+value;
+			if (value instanceof String) {
+				resValue = "'" + value + "'";
+			} 			
+			res = res + ","+resValue;
 		}
 		res = res.substring(1);
 		return res;
 	}
 
-	private String getStringArray(String[] cols, ArrayList<String> values, String separador) {
+	private String getStringArray(ArrayList cols, ArrayList values, String separador) {
 		// `name`='Buri'
 		String res = "";
-		for (int i = 0; i < cols.length; i++) {
-			String value = values.get(i);
-			String col = cols[i];
+		for (int i = 0; i < cols.size(); i++) {
+			Object value = values.get(i);
+			String col = (String) cols.get(i);
+			
+			String resValue = ""+value;
+			if (value instanceof String) {
+				resValue = "'" + value + "'";
+			} 
 
-			res = res + separador + "'" + col + "'='" + value + "'";
+			res = res + separador + "'" + col + "'="+resValue;
 
 		}
 
@@ -95,7 +110,7 @@ public class Conexion {
 	 *         insertara bien o no
 	 * @throws SQLException Error de SQL, ¿Quizá la tabla no existe?
 	 */
-	public boolean insertar(String TABLA, String[] cols, ArrayList<String> values) throws SQLException {
+	public boolean insertar(String TABLA, ArrayList cols, ArrayList values) throws SQLException {
 		String tail = this.getTailValues(values);
 		String head = this.getStringArray(cols);
 		String query = "insert into " + TABLA + " (" + head + ") values " + tail + "";
@@ -110,13 +125,13 @@ public class Conexion {
 		return state.executeQuery("select * from " + TABLA);
 	}
 
-	public ResultSet select(String TABLA, String[] cols, ArrayList<String> values) throws SQLException {
+	public ResultSet select(String TABLA, ArrayList cols, ArrayList values) throws SQLException {
 		String tail = this.getStringArray(cols, values, " AND ");
 		Statement state = this.getState();
 		return state.executeQuery("select * from " + TABLA + " WHERE " + tail);
 	}
 
-	public void update(String TABLA, Integer ID, String[] cols, ArrayList<String> values) throws SQLException {
+	public void update(String TABLA, Integer ID, ArrayList cols, ArrayList values) throws SQLException {
 		// UPDATE "+TABLA+" SET `name`='Buri' WHERE `id`="+ID;
 		String tail = this.getStringArray(cols, values, ", ");
 		String query = "UPDATE 	 " + TABLA + " SET " + tail + "  WHERE  `id`=" + ID;

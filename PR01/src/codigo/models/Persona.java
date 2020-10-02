@@ -9,11 +9,18 @@ import java.util.ArrayList;
 public class Persona extends DbObject {	 
 	 
 	private static final String TABLE = "person";
-	private static final String[] COLS = {"name", "lastname"};
+	private static final ArrayList COLS = getArrayCols();
 		
 	private int id = 0;
 	public String name = "";  
 	public String lastname = "";  
+	
+	private static ArrayList getArrayCols() {
+		ArrayList list = new ArrayList();
+		list.add("name");
+		list.add("lastname"); 
+		return list;
+	}
 	
 	@Override
 	public DbObject parse(ResultSet rs) throws SQLException {
@@ -25,13 +32,15 @@ public class Persona extends DbObject {
 		return per;		
 	}
 
+	
+
 	@Override
 	public String getTable() { 
 		return TABLE;
 	} 
 	
 	@Override
-	public String[] getCols() { 
+	public ArrayList getCols() { 
 		return COLS;
 	}
 

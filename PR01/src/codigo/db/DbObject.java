@@ -10,8 +10,8 @@ public abstract class DbObject {
 	 
 	public abstract int   getId();
 	public abstract String   getTable();
-	public abstract String[] getCols();
-	public abstract ArrayList<String> getValues();
+	public abstract ArrayList getCols();
+	public abstract ArrayList getValues();
 	public abstract DbObject parse(ResultSet rs) throws SQLException;
 	
 	public void insertar() throws SQLException { 
