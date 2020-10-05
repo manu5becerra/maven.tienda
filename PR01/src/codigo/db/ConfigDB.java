@@ -3,6 +3,8 @@ package codigo.db;
 import java.util.ArrayList;
 
 public abstract class  ConfigDB {
+	
+	public static String DB_CONEXION = "jdbc:sqlite:sample.db";
 
 	public static ArrayList<String> queries = getQueries();
 

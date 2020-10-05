@@ -13,7 +13,7 @@ public class Conexion {
 
 	private Conexion() {
 		try {
-			connection = DriverManager.getConnection("jdbc:sqlite:sample.db");
+			connection = DriverManager.getConnection(ConfigDB.DB_CONEXION);
 			initiateDatabase();
 		} catch (SQLException e) {
 			e.printStackTrace();
