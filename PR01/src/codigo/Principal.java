@@ -3,6 +3,7 @@ package codigo;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import codigo.cfg.Config;
 import codigo.db.DbObject;
 import codigo.models.Persona;
 
@@ -10,6 +11,8 @@ public class Principal {
 
 	public static void main(String[] args) { 
 		
+		
+		Config.getInstance();
 		
 		try {
 			
