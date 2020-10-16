@@ -96,9 +96,11 @@ public class Config {
 			  Transformer transformer = transformerFactory.newTransformer();
 			  DOMSource source = new DOMSource(doc);
 			  File file = new File("config.xml");
+			  
 			  StreamResult result = new StreamResult(file);			  
 			  
-			  System.out.println(result);
+			  transformer.transform(source, result);
+			  
 			  System.out.println(file.getAbsolutePath());
 			  
 			  return doc;

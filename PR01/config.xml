@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><configuration conexion="jdbc:sqlite:sample.db"><queries query="CREATE TABLE IF NOT EXISTS 'producto' (&#9;'id'&#9;INTEGER,&#9;'name'&#9;TEXT,&#9;'desc'&#9;TEXT,&#9;'precio' INTEGER DEFAULT 0,&#9;'stock'&#9;INTEGER DEFAULT 1,&#9;PRIMARY KEY('id' AUTOINCREMENT))"/></configuration>
